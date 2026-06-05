@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bq83skj2cj1dv"]
+
+[ext_resource type="Script" path="res://gamescene.gd" id="1_v87xk"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_v87xk")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.641865, 0.766818, 0, -0.766818, 0.641865, 0, 9.88323, 4.38272)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

@@ -1,9 +1,12 @@
-extends Node2D
+extends Node3D
 
 var paths = []
 var rng = RandomNumberGenerator.new()
 @export var map1 = []
 @export var map2 = []
+
+var room = preload("res://room.tscn")
+var door = preload("res://door.tscn")
 func mapper(grid):
 	var k = 1
 	for i in range(3):
@@ -36,6 +39,8 @@ func pathgen(pos, path, visited, map):
 					
 	
 func _ready():
+	rng.randomize()
+
 	mapper(map1)
 	mapper(map2)
 	pathgen(Vector2(0,0), [], {}, map1)
@@ -48,7 +53,13 @@ func _ready():
 
 	for i in range(3):
 		for j in range(3):
-			if (map1[i][j] == path1[k1] and k1 <= path1.size()):
+			if (map1[i][j] == path1[k1] and k1 < path1.size()):
+				var room_instance = room.instantiate()
+				var door_instance = door.instantiate()
+				room_instance.position = Vector3(i, 0, j)
+				door_instance.position = Vector3(i, 0, j)
+				add_child(room_instance)
+				add_child(door_instance)
 				map1[i][j] = 1
 				k1 += 1
 			else:
@@ -59,7 +70,7 @@ func _ready():
 	
 	for i in range(3):
 		for j in range(3):
-			if (map2[i][j] == path2[k2] and k2 <= path2.size()):
+			if (map2[i][j] == path2[k2] and k2 < path2.size()):
 				map2[i][j] = 1
 				k2 += 1
 			else:

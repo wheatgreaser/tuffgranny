@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnf6wbuyrmxdj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_io8hc"]
+
+[node name="room" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_io8hc")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-09, -1, 0, 0.1, -4.37114e-08, 0, 0, 0.5)
+mesh = SubResource("BoxMesh_io8hc")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_io8hc")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, 0.5, 0, 0)
+mesh = SubResource("BoxMesh_io8hc")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, -0.5, 0, 0)
+mesh = SubResource("BoxMesh_io8hc")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-09, -1, 0, 0.1, -4.37114e-08, 0, 0, -0.5)
+mesh = SubResource("BoxMesh_io8hc")

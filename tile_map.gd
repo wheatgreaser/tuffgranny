@@ -1,4 +1,4 @@
-extends Node2D
+extends TileMap
 
 var paths = []
 var rng = RandomNumberGenerator.new()
@@ -50,6 +50,7 @@ func _ready():
 		for j in range(3):
 			if (map1[i][j] == path1[k1] and k1 <= path1.size()):
 				map1[i][j] = 1
+				set_cell(0, Vector2i(i, j), 0, Vector2(1,1))
 				k1 += 1
 			else:
 				map1[i][j] = 0
