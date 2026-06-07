@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://db53nt10eudpm"]
+
+[ext_resource type="Material" uid="uid://uokw147yqlwv" path="res://Portal.tres" id="1_8opxo"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tj4j8"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_y2ppj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5pj5l"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_tj4j8")
+
+[node name="Portal" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 1.14958, 0)
+material_override = ExtResource("1_8opxo")
+mesh = SubResource("PlaneMesh_y2ppj")
+
+[node name="fatobject" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08561, 0.937986, 0)
+mesh = SubResource("BoxMesh_5pj5l")

@@ -1,9 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://jlib1g8jvo17"]
+[gd_scene load_steps=4 format=3 uid="uid://jlib1g8jvo17"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w1fbo"]
+cull_mode = 2
+albedo_color = Color(0, 1, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4abng"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_rleyq"]
+size = Vector3(0.5, 1, 0.25)
+
 [node name="Node3D" type="Node3D"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 10, 0, 0, 0, 0.5, 0, 0, 0)
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.25, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_w1fbo")
 mesh = SubResource("BoxMesh_4abng")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_rleyq")
