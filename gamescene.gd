@@ -90,6 +90,3 @@ func _ready():
 				k2 += 1
 			else:
 				map2[i][j] = 0
-
-
-
