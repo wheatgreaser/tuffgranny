@@ -9,7 +9,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var look_dir: Vector2
 @onready var camera = $Camera3D
 var camera_sens = 100
-
+var keys = 0
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():

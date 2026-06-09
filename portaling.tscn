@@ -53,7 +53,7 @@ _teleport_area_path = NodePath("TeleportArea")
 _teleport_collider_path = NodePath("TeleportArea/Collider")
 portal_size = Vector2(2, 2.5)
 exit_portal = NodePath("../Portal3D2")
-player_camera = NodePath("../Camera3D")
+player_camera = NodePath("../CharacterBody3D/Camera3D")
 portal_frame_width = 0.0
 viewport_size_mode = 0
 view_direction = 0
@@ -90,7 +90,7 @@ _teleport_area_path = NodePath("TeleportArea")
 _teleport_collider_path = NodePath("TeleportArea/Collider")
 portal_size = Vector2(2, 2.5)
 exit_portal = NodePath("../Portal3D")
-player_camera = NodePath("../Camera3D")
+player_camera = NodePath("../CharacterBody3D/Camera3D")
 portal_frame_width = 0.0
 viewport_size_mode = 0
 view_direction = 0
@@ -117,9 +117,6 @@ mesh = SubResource("ArrayMesh_jgyff")
 [node name="Collider" type="CollisionShape3D" parent="Portal3D2/TeleportArea" unique_id=1931406074]
 shape = SubResource("BoxShape3D_uaf4v")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1608661210]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86743736, 3.2212055)
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1198689154]
 environment = SubResource("Environment_pljwc")
 
@@ -127,7 +124,11 @@ environment = SubResource("Environment_pljwc")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=369038411]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1871916, 4.0800467)
+collision_layer = 32769
 script = ExtResource("4_irvfb")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D" unique_id=1608661210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.31975424, -0.8588412)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=902731705]
 mesh = SubResource("CapsuleMesh_pljwc")

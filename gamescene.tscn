@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bq83skj2cj1dv"]
+[gd_scene format=3 uid="uid://bq83skj2cj1dv"]
 
-[ext_resource type="Script" path="res://gamescene.gd" id="1_v87xk"]
-[ext_resource type="Script" path="res://Player.gd" id="2_1f6rl"]
+[ext_resource type="Script" uid="uid://x8dpind6ne7" path="res://gamescene.gd" id="1_v87xk"]
+[ext_resource type="Script" uid="uid://dm3bem0ieb5x" path="res://Player.gd" id="2_1f6rl"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_67kj2"]
 
@@ -9,23 +9,24 @@
 
 [sub_resource type="Environment" id="Environment_pjt0j"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D2" type="Node3D" unique_id=803365638]
 script = ExtResource("1_v87xk")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1856071114]
 
-[node name="Player" type="CharacterBody3D" parent="."]
+[node name="Player" type="CharacterBody3D" parent="." unique_id=216480398 groups=["player"]]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+collision_layer = 32769
 script = ExtResource("2_1f6rl")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=1665217183]
 mesh = SubResource("CapsuleMesh_67kj2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=364395515]
 shape = SubResource("CapsuleShape3D_5t3cw")
 
-[node name="Camera3D" type="Camera3D" parent="Player"]
+[node name="Camera3D" type="Camera3D" parent="Player" unique_id=1327479915]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=607753156]
 environment = SubResource("Environment_pjt0j")

@@ -1,4 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://jlib1g8jvo17"]
+[gd_scene format=3 uid="uid://jlib1g8jvo17"]
+
+[ext_resource type="Script" uid="uid://c6armfasycrqt" path="res://door.gd" id="1_ba8gm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rleyq"]
+size = Vector3(0.125, 0.5, 0.125)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w1fbo"]
 cull_mode = 2
@@ -6,18 +11,23 @@ albedo_color = Color(0, 1, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4abng"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_rleyq"]
-size = Vector3(0.5, 1, 0.25)
+[node name="Node3D" type="Node3D" unique_id=1967819881]
+script = ExtResource("1_ba8gm")
 
-[node name="Node3D" type="Node3D"]
+[node name="Area3D" type="Area3D" parent="." unique_id=1479229519]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=2136335110]
+shape = SubResource("BoxShape3D_rleyq")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=350905217]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1416135702]
+shape = SubResource("BoxShape3D_rleyq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=642500446]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.25, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_w1fbo")
 mesh = SubResource("BoxMesh_4abng")
 skeleton = NodePath("../..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("BoxShape3D_rleyq")
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
