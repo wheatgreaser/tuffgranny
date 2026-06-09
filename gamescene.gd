@@ -61,6 +61,9 @@ func _ready():
 	var room_lookup2 = {}
 	var room_colors_A = {}
 	var room_colors_B = {}
+	var key_door_dict = {}
+	var room_node_lookup2 = {} 
+	var room_node_lookup1 = {}
 	mapper(map1)
 	mapper(map2)
 	pathgen(Vector2(0,0), [], {}, map1)
@@ -99,36 +102,43 @@ func _ready():
 				room_lookup1[room_id] = Vector3(i, 0, j)
 				room_nodes1.append(room_instance)
 				room_instance.scale = Vector3(5,5,5)
+				room_node_lookup1[room_id] = room_instance
 				add_child(room_instance)
 				room_colors_A[room_id] = Color8(colorrandr, colorrandg, colorrandb)
 				map1[i][j] = 1
 				door_pos1.append(Vector3(i,0,j))
-				if room_id != path1[0]:
-					var key_instance = key.instantiate()
-					key_instance.position = Vector3(
-						i * 5 + 2,
-						-2,
-						j * 5 + 2
-						)
-					key_instance.scale = Vector3(0.2, 0.2, 0.2)
-					key_in_A.append(key_instance)
-					add_child(key_instance)
+				
 	
 			else:
 				map1[i][j] = 0
-
+	for i in range(1, path1.size()): 
+		var room_id = path1[i]
+		var pos = room_lookup1[room_id]
+		var key_instance = key.instantiate()
+		key_instance.position = Vector3(pos.x * 5 + 2, -2, pos.z * 5 + 2)
+		key_instance.scale = Vector3(0.2, 0.2, 0.2)
+		key_in_A.append(key_instance)
+		add_child(key_instance)
 	for i in range(path1.size() - 1):
 		var a = room_lookup1[path1[i]]
 		var b = room_lookup1[path1[i + 1]]
+		var dir = Vector2(b.x - a.x, b.z - a.z)
+		var room_a_node = room_node_lookup1[path1[i]]
+		var room_b_node = room_node_lookup1[path1[i + 1]]
+		
 
+		
 		var door_instance = door.instantiate()
+		door_instance.lock_id = path1[i + 1]
+		door_instance.wall_node_a = room_a_node.get_wall(dir)
+		door_instance.wall_node_b = room_b_node.get_wall(-dir) 
 		door_instance.position = Vector3(
 		(a.x + b.x) * 2.5,
-		0,
+		-2,
 		(a.z + b.z) * 2.5
 		)
-		door_instance.scale = Vector3(5, 5, 5)
-
+		
+		door_instance.scale = Vector3(5,5,5)
 		add_child(door_instance)
 		doors1.append(door_instance)
 						
@@ -145,6 +155,7 @@ func _ready():
 				var room_instance = room.instantiate()
 				room_instance.position = Vector3(i* 5, 20, j*5)
 				room_instance.scale = Vector3(5,5,5)
+				room_node_lookup2[room_id] = room_instance
 				var mesh = room_instance.get_node("Floor/floorbody")
 				var mat = StandardMaterial3D.new()
 				mat.albedo_color = Color8(colorrandr, colorrandg, colorrandb)
@@ -161,30 +172,37 @@ func _ready():
 				map2[i][j] = 1
 				door_pos2.append(Vector3(i,20,j))
 				room_colors_B[room_id] = Color8(colorrandr, colorrandg, colorrandb)
-				if room_id != path2[path2.size() - 1]:
-					var key_instance = key.instantiate()
-					key_instance.position = Vector3(
-						i * 5 + 2,
-						17.7,
-						j * 5 + 2
-						)
-					key_instance.scale = Vector3(0.2, 0.2, 0.2)
-					key_in_B.append(key_instance)
-					add_child(key_instance)
+				
 				
 			else:
 				map2[i][j] = 0
+	for i in range(0, path2.size()-1): 
+		var room_id = path2[i]
+		var pos = room_lookup2[room_id]
+		var key_instance = key.instantiate()
+		key_instance.position = Vector3(pos.x * 5 + 2, 17.7, pos.z * 5 + 2)
+		key_instance.scale = Vector3(0.2, 0.2, 0.2)
+		key_in_B.append(key_instance)
+		add_child(key_instance)
+		
 	for i in range(path2.size() - 1):
 		var a = room_lookup2[path2[i]]
 		var b = room_lookup2[path2[i + 1]]
+		
 
 		var door_instance = door.instantiate()
+		door_instance.lock_id = path2[i + 1]
 		door_instance.position = Vector3(
 			(a.x + b.x) * 2.5,
-			20,
+			18,
 			(a.z + b.z) * 2.5
 		)
-		door_instance.scale = Vector3(5, 5, 5)
+		door_instance.scale = Vector3(5,5,5)	
+		var dir = Vector2(b.x - a.x, b.z - a.z)
+		var room_a_node = room_node_lookup2[path2[i]]
+		var room_b_node = room_node_lookup2[path2[i + 1]]
+		door_instance.wall_node_a = room_a_node.get_wall(dir)
+		door_instance.wall_node_b = room_b_node.get_wall(-dir)
 
 		add_child(door_instance)
 		doors2.append(door_instance)
@@ -196,12 +214,14 @@ func _ready():
 		portalsB[i].activate()
 	print(room_colors_A)
 	for i in range(key_in_B.size()):
+		key_in_B[i].key_id = path1[i + 1]
 		var mesh = key_in_B[i].get_node("keyobj/keymesh")
 		var mat = StandardMaterial3D.new()
 		mat.albedo_color = room_colors_A[path1[i+1]]
 		mesh.material_override = mat
 	
 	for i in range(key_in_A.size()):
+		key_in_A[i].key_id = path2[i + 1]
 		var mesh = key_in_A[i].get_node("keyobj/keymesh")
 		var mat = StandardMaterial3D.new()
 		mat.albedo_color = room_colors_B[path2[i+1]]
