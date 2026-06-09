@@ -9,6 +9,7 @@ var room = preload("res://room.tscn")
 var door = preload("res://door.tscn")
 var key = preload("res://key.tscn")
 var portal = preload("res://portal.tscn")
+var flag = preload("res://endgoal.tscn")
 @onready var player = $Player
 
 func mapper(grid):
@@ -64,6 +65,13 @@ func _ready():
 	var key_door_dict = {}
 	var room_node_lookup2 = {} 
 	var room_node_lookup1 = {}
+	var walls = [
+	Vector2(1,0),   # east
+	Vector2(-1,0),  # west
+	Vector2(0,1),   # south
+	Vector2(0,-1)   # north
+]
+	var room_portals_A = {}
 	mapper(map1)
 	mapper(map2)
 	pathgen(Vector2(0,0), [], {}, map1)
@@ -86,17 +94,23 @@ func _ready():
 				rng.randomize()
 				var colorrandb = rng.randi_range(0, 255)
 				var room_instance = room.instantiate()
-				var mesh = room_instance.get_node("Floor/floorbody")
+				var mesh1 = room_instance.get_node("StaticBody3D2/MeshInstance3D2")
+				var mesh2 = room_instance.get_node("StaticBody3D3/MeshInstance3D6")
+				var mesh3 = room_instance.get_node("StaticBody3D4/MeshInstance3D5")
+				var mesh4 = room_instance.get_node("StaticBody3D5/MeshInstance3D4")
 				var mat = StandardMaterial3D.new()
 	
 				mat.albedo_color = Color8(colorrandr, colorrandg, colorrandb)
-				mesh.material_override = mat
+				mesh1.material_override = mat
+				mesh2.material_override = mat
+				mesh3.material_override = mat
+				mesh4.material_override = mat
 				var room_id = map1[i][j]
 				room_instance.position = Vector3(i* 5, 0, j*5)
 				var portal_instance = portal.instantiate()
-				portal_instance.position = Vector3(i* 5, -2, j*5)
+				portal_instance.position = Vector3(i * 5, -2, j * 5)
 				portal_instance.player_camera = $Player/Camera3D
-				
+				portal_instance.scale = Vector3(0.7, 0.7, 0.7)
 				add_child(portal_instance)
 				portalsA.append(portal_instance)
 				room_lookup1[room_id] = Vector3(i, 0, j)
@@ -137,10 +151,11 @@ func _ready():
 		-2,
 		(a.z + b.z) * 2.5
 		)
-		
+
 		door_instance.scale = Vector3(5,5,5)
 		add_child(door_instance)
 		doors1.append(door_instance)
+		
 						
 	for i in range(3):
 		for j in range(3):
@@ -153,19 +168,28 @@ func _ready():
 				var colorrandb = rng.randi_range(0, 255)
 				var room_id = map2[i][j]
 				var room_instance = room.instantiate()
+				var mesh1 = room_instance.get_node("StaticBody3D2/MeshInstance3D2")
+				var mesh2 = room_instance.get_node("StaticBody3D3/MeshInstance3D6")
+				var mesh3 = room_instance.get_node("StaticBody3D4/MeshInstance3D5")
+				var mesh4 = room_instance.get_node("StaticBody3D5/MeshInstance3D4")
 				room_instance.position = Vector3(i* 5, 20, j*5)
 				room_instance.scale = Vector3(5,5,5)
 				room_node_lookup2[room_id] = room_instance
-				var mesh = room_instance.get_node("Floor/floorbody")
+				
 				var mat = StandardMaterial3D.new()
 				mat.albedo_color = Color8(colorrandr, colorrandg, colorrandb)
-				mesh.material_override = mat
-				var portal_instance = portal.instantiate()
-				portal_instance.player_camera = $Player/Camera3D
-				portal_instance.position = Vector3(i* 5, 18, j*5)
-				portalsB.append(portal_instance)
-				add_child(portal_instance)
-		
+				
+				mesh1.material_override = mat
+				mesh2.material_override = mat
+				mesh3.material_override = mat
+				mesh4.material_override = mat
+				if room_id != path2[path2.size() - 1]:
+					var portal_instance = portal.instantiate()
+					portal_instance.position = Vector3(i * 5, 18, j * 5)
+					portal_instance.player_camera = $Player/Camera3D
+					portal_instance.scale = Vector3(0.7, 0.7, 0.7)
+					add_child(portal_instance)
+					portalsB.append(portal_instance)
 				room_nodes2.append(room_instance)
 				room_lookup2[room_id] = Vector3(i, 20, j)
 				add_child(room_instance)
@@ -207,7 +231,7 @@ func _ready():
 		add_child(door_instance)
 		doors2.append(door_instance)
 
-	for i in range(portalsA.size()):
+	for i in range(portalsA.size() - 1):
 		portalsA[i].exit_portal = portalsB[i]
 		portalsB[i].exit_portal = portalsA[i]
 		portalsA[i].activate()
@@ -227,3 +251,6 @@ func _ready():
 		mat.albedo_color = room_colors_B[path2[i+1]]
 		mesh.material_override = mat
 	
+	var endgoal = flag.instantiate()
+	endgoal.position = room_node_lookup2[path2[path2.size()-1]].position
+	add_child(endgoal)

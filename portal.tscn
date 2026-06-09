@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://cw1r4c1d7beyv" path="res://addons/portals/scripts/portal_3d.gd" id="1_grrij"]
 [ext_resource type="Material" uid="uid://dcfkcyddxkglf" path="res://addons/portals/materials/editor-preview-portal-material.tres" id="2_6r214"]
 [ext_resource type="Script" uid="uid://bxcel82b180o3" path="res://addons/portals/scripts/portal_boxmesh.gd" id="3_2pgh4"]
+[ext_resource type="Texture2D" uid="uid://cldbufhsc1f86" path="res://images/obsidiantexture.png" id="4_6r214"]
+[ext_resource type="Texture2D" uid="uid://knofbsx8cehc" path="res://images/nether.jpg" id="5_2pgh4"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_wtc1a"]
 _surfaces = [{
@@ -22,12 +24,27 @@ size = Vector3(2, 2.5, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_w8rct"]
 size = Vector3(2, 2.5, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_grrij"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2pgh4"]
+albedo_texture = ExtResource("4_6r214")
+uv1_scale = Vector3(3, 3, 3)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6r214"]
+[sub_resource type="BoxMesh" id="BoxMesh_wtc1a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8rct"]
+albedo_texture = ExtResource("4_6r214")
+uv1_scale = Vector3(3, 3, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r8kna"]
+albedo_texture = ExtResource("4_6r214")
+uv1_scale = Vector3(3, 3, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wtc1a"]
 transparency = 1
-cull_mode = 2
-albedo_color = Color(0, 1, 1, 0.14509805)
+albedo_color = Color(1, 1, 1, 0.28235295)
+albedo_texture = ExtResource("5_2pgh4")
+uv1_scale = Vector3(3, 3, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w8rct"]
 
 [node name="Portal3D" type="Node3D" unique_id=405346721 groups=["portals"]]
 process_priority = 100
@@ -63,7 +80,22 @@ mesh = SubResource("ArrayMesh_wtc1a")
 [node name="Collider" type="CollisionShape3D" parent="TeleportArea" unique_id=903565456]
 shape = SubResource("BoxShape3D_w8rct")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=322143939]
-transform = Transform3D(2.5, 0, 0, 0, 3, 0, 0, 0, 0.1, 0, 0, 0)
-mesh = SubResource("BoxMesh_grrij")
-surface_material_override/0 = SubResource("StandardMaterial3D_6r214")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1768984414]
+transform = Transform3D(0.5, 0, 0, 0, 3, 0, 0, 0, 0.5, -1.3, 0, 0)
+material_override = SubResource("StandardMaterial3D_2pgh4")
+mesh = SubResource("BoxMesh_wtc1a")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=323550455]
+transform = Transform3D(0.5, 0, 0, 0, 3, 0, 0, 0, 0.5, 1.3, 0, 0)
+material_override = SubResource("StandardMaterial3D_w8rct")
+mesh = SubResource("BoxMesh_wtc1a")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=1212043578]
+transform = Transform3D(-2.1855694e-08, -3.1, 0, 0.5, -1.355053e-07, 0, 0, 0, 0.5, 0, 1.5, 0)
+material_override = SubResource("StandardMaterial3D_r8kna")
+mesh = SubResource("BoxMesh_wtc1a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1786323661]
+transform = Transform3D(2, 0, 0, 0, 3, 0, 0, 0, 0.1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_wtc1a")
+mesh = SubResource("BoxMesh_w8rct")

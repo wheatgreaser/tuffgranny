@@ -2,12 +2,13 @@
 
 [ext_resource type="Script" uid="uid://cd8sn0vb5i7ib" path="res://room.gd" id="1_bisa2"]
 [ext_resource type="Material" uid="uid://b1yk83pu2ejj7" path="res://wall1.tres" id="1_bqpif"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ldnkr"]
-cull_mode = 2
-albedo_color = Color(1, 0, 0, 1)
+[ext_resource type="Texture2D" uid="uid://c5pjk0cgac664" path="res://images/red-and-black.png" id="2_4o3f6"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_io8hc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v5vuv"]
+albedo_texture = ExtResource("2_4o3f6")
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_41gtl"]
 
@@ -24,9 +25,9 @@ script = ExtResource("1_bisa2")
 
 [node name="floorbody" type="MeshInstance3D" parent="Floor" unique_id=1572701876]
 transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, -0.547953, 0)
-material_override = SubResource("StandardMaterial3D_ldnkr")
 mesh = SubResource("BoxMesh_io8hc")
 skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_v5vuv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=861210176]
 transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, -0.5, 0)

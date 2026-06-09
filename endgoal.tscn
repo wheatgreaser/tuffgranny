@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://r28voyif62di"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4xvg6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4xvg6"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 10.0
+
+[node name="Node3D" type="Node3D" unique_id=447239948]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1112777317]
+mesh = SubResource("BoxMesh_4xvg6")
+surface_material_override/0 = SubResource("StandardMaterial3D_4xvg6")
