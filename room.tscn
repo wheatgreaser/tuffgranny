@@ -2,87 +2,107 @@
 
 [ext_resource type="Script" uid="uid://cd8sn0vb5i7ib" path="res://room.gd" id="1_bisa2"]
 [ext_resource type="Material" uid="uid://b1yk83pu2ejj7" path="res://wall1.tres" id="1_bqpif"]
-[ext_resource type="Texture2D" uid="uid://c5pjk0cgac664" path="res://images/red-and-black.png" id="2_4o3f6"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_io8hc"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v5vuv"]
-albedo_texture = ExtResource("2_4o3f6")
-uv1_scale = Vector3(10, 10, 10)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_41gtl"]
+[ext_resource type="Script" uid="uid://7avw8y7gv40c" path="res://enemy.gd" id="3_4o3f6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nv65j"]
 cull_mode = 2
 albedo_color = Color(0, 0, 1, 1)
 
+[sub_resource type="BoxMesh" id="BoxMesh_io8hc"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_fh2v7"]
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_bisa2"]
+vertices = PackedVector3Array(-2, -1.9897649, -2, -2, -1.9897649, 2, 2, -1.9897649, 2, 2, -1.9897649, -2)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4o3f6"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bisa2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bisa2"]
+
 [node name="room" type="Node3D" unique_id=1342040157]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 script = ExtResource("1_bisa2")
 
-[node name="Floor" type="StaticBody3D" parent="." unique_id=568093039]
-
-[node name="floorbody" type="MeshInstance3D" parent="Floor" unique_id=1572701876]
-transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, -0.547953, 0)
-mesh = SubResource("BoxMesh_io8hc")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_v5vuv")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=861210176]
-transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_41gtl")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1849736884]
-transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0.5, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1849736884]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0.0011327565, 0.5, 0.0011664331)
 material_override = SubResource("StandardMaterial3D_nv65j")
 mesh = SubResource("BoxMesh_io8hc")
-skeleton = NodePath("../..")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="." unique_id=815724944 groups=["wall"]]
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D2" unique_id=1455620998]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-09, -1, 0, 0.1, -4.37114e-08, 0, 0, 0.5)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-09, -1, 0, 0.1, -4.371139e-08, 0, 0, 0.5)
 material_override = ExtResource("1_bqpif")
 mesh = SubResource("BoxMesh_io8hc")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2" unique_id=1756261018]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-09, -1, 0, 0.1, -4.37114e-08, 0, 0, 0.5)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-09, -1, 0, 0.1, -4.371139e-08, 0, 0, 0.5)
 shape = SubResource("BoxShape3D_fh2v7")
 
 [node name="StaticBody3D3" type="StaticBody3D" parent="." unique_id=1918243288 groups=["wall"]]
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="StaticBody3D3" unique_id=2094247596]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-09, -1, 0, 0.1, -4.37114e-08, 0, 0, -0.5)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-09, -1, 0, 0.1, -4.371139e-08, 0, 0, -0.5)
 material_override = ExtResource("1_bqpif")
 mesh = SubResource("BoxMesh_io8hc")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3" unique_id=301289337]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-09, -1, 0, 0.1, -4.37114e-08, 0, 0, -0.5)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-09, -1, 0, 0.1, -4.371139e-08, 0, 0, -0.5)
 shape = SubResource("BoxShape3D_fh2v7")
 
 [node name="StaticBody3D4" type="StaticBody3D" parent="." unique_id=1607837294 groups=["wall"]]
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="StaticBody3D4" unique_id=1758166910]
-transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, -0.5, 0, 0)
+transform = Transform3D(-4.371139e-08, -0.01, 0, 1, -4.3711387e-10, 0, 0, 0, 1, -0.5, 0, 0)
 material_override = ExtResource("1_bqpif")
 mesh = SubResource("BoxMesh_io8hc")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D4" unique_id=1373033582]
-transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, -0.5, 0, 0)
+transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, -0.5, 0, 0)
 shape = SubResource("BoxShape3D_fh2v7")
 
 [node name="StaticBody3D5" type="StaticBody3D" parent="." unique_id=1056251563 groups=["wall"]]
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="StaticBody3D5" unique_id=710578669]
-transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, 0.5, 0, 0)
+transform = Transform3D(-4.371139e-08, -0.01, 0, 1, -4.3711387e-10, 0, 0, 0, 1, 0.5, 0, 0)
 material_override = ExtResource("1_bqpif")
 mesh = SubResource("BoxMesh_io8hc")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D5" unique_id=638464460]
-transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, 0.5, 0, 0)
+transform = Transform3D(-4.371139e-08, -0.1, 0, 1, -4.371139e-09, 0, 0, 0, 1, 0.5, 0, 0)
 shape = SubResource("BoxShape3D_fh2v7")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1660267628]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+navigation_mesh = SubResource("NavigationMesh_bisa2")
+
+[node name="Floor" type="StaticBody3D" parent="NavigationRegion3D" unique_id=568093039]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Floor" unique_id=570196792]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, -0.547953, 0)
+shape = SubResource("BoxShape3D_4o3f6")
+
+[node name="floorbody" type="MeshInstance3D" parent="NavigationRegion3D/Floor" unique_id=1572701876]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, -0.547953, 0)
+mesh = SubResource("BoxMesh_io8hc")
+skeleton = NodePath("../../..")
+
+[node name="enemy" type="CharacterBody3D" parent="." unique_id=593460347 groups=["enemy"]]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -0.12922464, -0.31650954, -0.24779521)
+script = ExtResource("3_4o3f6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="enemy" unique_id=69651912]
+mesh = SubResource("CapsuleMesh_bisa2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="enemy" unique_id=884479220]
+shape = SubResource("CapsuleShape3D_bisa2")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="enemy" unique_id=493310484]

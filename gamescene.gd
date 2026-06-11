@@ -4,12 +4,13 @@ var paths = []
 var rng = RandomNumberGenerator.new()
 @export var map1 = []
 @export var map2 = []
-
+@onready var target=$Player
 var room = preload("res://room.tscn")
 var door = preload("res://door.tscn")
 var key = preload("res://key.tscn")
 var portal = preload("res://portal.tscn")
 var flag = preload("res://endgoal.tscn")
+
 @onready var player = $Player
 
 func mapper(grid):
@@ -62,16 +63,11 @@ func _ready():
 	var room_lookup2 = {}
 	var room_colors_A = {}
 	var room_colors_B = {}
-	var key_door_dict = {}
 	var room_node_lookup2 = {} 
 	var room_node_lookup1 = {}
-	var walls = [
-	Vector2(1,0),   # east
-	Vector2(-1,0),  # west
-	Vector2(0,1),   # south
-	Vector2(0,-1)   # north
-]
-	var room_portals_A = {}
+	var portal_lookup_A = {}
+	var portal_lookup_B = {}
+	
 	mapper(map1)
 	mapper(map2)
 	pathgen(Vector2(0,0), [], {}, map1)
@@ -82,8 +78,6 @@ func _ready():
 		var randnum2 = rng.randi_range(0, paths.size() - 1)
 		path2 = paths[randnum2]
 		
-	
-
 	for i in range(3):
 		for j in range(3):
 			if map1[i][j] in path1:
@@ -98,19 +92,22 @@ func _ready():
 				var mesh2 = room_instance.get_node("StaticBody3D3/MeshInstance3D6")
 				var mesh3 = room_instance.get_node("StaticBody3D4/MeshInstance3D5")
 				var mesh4 = room_instance.get_node("StaticBody3D5/MeshInstance3D4")
+				var mesh5 = room_instance.get_node("NavigationRegion3D/Floor/floorbody")
 				var mat = StandardMaterial3D.new()
 	
 				mat.albedo_color = Color8(colorrandr, colorrandg, colorrandb)
-				mesh1.material_override = mat
-				mesh2.material_override = mat
-				mesh3.material_override = mat
-				mesh4.material_override = mat
+				mesh1.material_override = mat.duplicate()
+				mesh2.material_override = mat.duplicate()
+				mesh3.material_override = mat.duplicate()
+				mesh4.material_override = mat.duplicate()
+				mesh5.material_override = mat.duplicate()
 				var room_id = map1[i][j]
 				room_instance.position = Vector3(i* 5, 0, j*5)
 				var portal_instance = portal.instantiate()
 				portal_instance.position = Vector3(i * 5, -2, j * 5)
 				portal_instance.player_camera = $Player/Camera3D
 				portal_instance.scale = Vector3(0.7, 0.7, 0.7)
+				portal_lookup_A[room_id] = portal_instance
 				add_child(portal_instance)
 				portalsA.append(portal_instance)
 				room_lookup1[room_id] = Vector3(i, 0, j)
@@ -121,8 +118,6 @@ func _ready():
 				room_colors_A[room_id] = Color8(colorrandr, colorrandg, colorrandb)
 				map1[i][j] = 1
 				door_pos1.append(Vector3(i,0,j))
-				
-	
 			else:
 				map1[i][j] = 0
 	for i in range(1, path1.size()): 
@@ -146,6 +141,14 @@ func _ready():
 		door_instance.lock_id = path1[i + 1]
 		door_instance.wall_node_a = room_a_node.get_wall(dir)
 		door_instance.wall_node_b = room_b_node.get_wall(-dir) 
+		if dir == Vector2(1, 0):      # east
+			door_instance.door_rot = Vector3(0, deg_to_rad(90), 0)
+		elif dir == Vector2(-1, 0):   # west
+			door_instance.door_rot = Vector3(0, deg_to_rad(-90), 0)
+		elif dir == Vector2(0, 1):    # south
+			door_instance.door_rot = Vector3(0, deg_to_rad(180), 0)
+		else:                         # north
+			door_instance.door_rot = Vector3.ZERO
 		door_instance.position = Vector3(
 		(a.x + b.x) * 2.5,
 		-2,
@@ -172,6 +175,7 @@ func _ready():
 				var mesh2 = room_instance.get_node("StaticBody3D3/MeshInstance3D6")
 				var mesh3 = room_instance.get_node("StaticBody3D4/MeshInstance3D5")
 				var mesh4 = room_instance.get_node("StaticBody3D5/MeshInstance3D4")
+				var mesh5 = room_instance.get_node("NavigationRegion3D/Floor/floorbody")
 				room_instance.position = Vector3(i* 5, 20, j*5)
 				room_instance.scale = Vector3(5,5,5)
 				room_node_lookup2[room_id] = room_instance
@@ -179,20 +183,22 @@ func _ready():
 				var mat = StandardMaterial3D.new()
 				mat.albedo_color = Color8(colorrandr, colorrandg, colorrandb)
 				
-				mesh1.material_override = mat
-				mesh2.material_override = mat
-				mesh3.material_override = mat
-				mesh4.material_override = mat
-				if room_id != path2[path2.size() - 1]:
-					var portal_instance = portal.instantiate()
-					portal_instance.position = Vector3(i * 5, 18, j * 5)
-					portal_instance.player_camera = $Player/Camera3D
-					portal_instance.scale = Vector3(0.7, 0.7, 0.7)
-					add_child(portal_instance)
-					portalsB.append(portal_instance)
+				mesh1.material_override = mat.duplicate()
+				mesh2.material_override = mat.duplicate()
+				mesh3.material_override = mat.duplicate()
+				mesh4.material_override = mat.duplicate()
+				mesh5.material_override = mat.duplicate()
+				
+				var portal_instance = portal.instantiate()
+				portal_instance.position = Vector3(i * 5, 18, j * 5)
+				portal_instance.player_camera = $Player/Camera3D
+				portal_instance.scale = Vector3(0.7, 0.7, 0.7)
+				add_child(portal_instance)
+				portalsB.append(portal_instance)
 				room_nodes2.append(room_instance)
 				room_lookup2[room_id] = Vector3(i, 20, j)
 				add_child(room_instance)
+				portal_lookup_B[room_id] = portal_instance
 				map2[i][j] = 1
 				door_pos2.append(Vector3(i,20,j))
 				room_colors_B[room_id] = Color8(colorrandr, colorrandg, colorrandb)
@@ -231,11 +237,12 @@ func _ready():
 		add_child(door_instance)
 		doors2.append(door_instance)
 
-	for i in range(portalsA.size() - 1):
+	for i in range(path1.size()):
 		portalsA[i].exit_portal = portalsB[i]
 		portalsB[i].exit_portal = portalsA[i]
 		portalsA[i].activate()
 		portalsB[i].activate()
+		
 	print(room_colors_A)
 	for i in range(key_in_B.size()):
 		key_in_B[i].key_id = path1[i + 1]
@@ -254,3 +261,6 @@ func _ready():
 	var endgoal = flag.instantiate()
 	endgoal.position = room_node_lookup2[path2[path2.size()-1]].position
 	add_child(endgoal)
+
+func _process(delta):
+	get_tree().call_group("enemy", "target_position", target.global_transform.origin)

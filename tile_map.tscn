@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://chatqwmjucmsp"]
+[gd_scene format=3 uid="uid://chatqwmjucmsp"]
 
 [ext_resource type="Texture2D" uid="uid://1x8xgwv8aut3" path="res://icon.svg" id="1_nejyi"]
 
@@ -72,6 +72,6 @@ texture = ExtResource("1_nejyi")
 [sub_resource type="TileSet" id="TileSet_dokvg"]
 sources/0 = SubResource("TileSetAtlasSource_ghxtq")
 
-[node name="TileMap" type="TileMap"]
+[node name="TileMap" type="TileMap" unique_id=2006064597]
 tile_set = SubResource("TileSet_dokvg")
 format = 2
