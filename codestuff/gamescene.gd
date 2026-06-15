@@ -81,19 +81,19 @@ func build_dimension(
 			data.room_lookup[room_id] = Vector3(i, y_offset, j)
 			data.room_nodes[room_id] = room_instance
 			data.room_colors[room_id] = color
+			if room_id != path.back():
+				var portal_instance = portal.instantiate()
+				portal_instance.position = Vector3(
+					i * room_spacing,
+					portal_y_offset,
+					j * room_spacing
+				)
+				portal_instance.player_camera = $Player/Camera3D
+				portal_instance.scale = portal_scale
 
-			var portal_instance = portal.instantiate()
-			portal_instance.position = Vector3(
-				i * room_spacing,
-				portal_y_offset,
-				j * room_spacing
-			)
-			portal_instance.player_camera = $Player/Camera3D
-			portal_instance.scale = portal_scale
+				add_child(portal_instance)
 
-			add_child(portal_instance)
-
-			data.portal_lookup[room_id] = portal_instance
+				data.portal_lookup[room_id] = portal_instance
 
 			grid[i][j] = 1
 
