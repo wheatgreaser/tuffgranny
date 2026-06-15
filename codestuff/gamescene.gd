@@ -43,7 +43,8 @@ func build_dimension(
 	path: Array,
 	grid: Array,
 	y_offset: float,
-	portal_y_offset: float
+	portal_y_offset: float,
+	dimension_id: String
 ) -> Dictionary:
 
 	var data = {
@@ -52,7 +53,8 @@ func build_dimension(
 		"room_colors": {},
 		"portal_lookup": {},
 		"keys": [],
-		"doors": []
+		"doors": [],
+		
 	}
 
 	for i in range(dim):
@@ -109,7 +111,7 @@ func build_dimension(
 
 		var door_instance = door.instantiate()
 
-		door_instance.lock_id = path[i + 1]
+		door_instance.lock_id = "%s_%d" % [dimension_id, path[i + 1]]
 
 		door_instance.wall_node_a = room_a.get_wall(dir)
 		door_instance.wall_node_b = room_b.get_wall(-dir)
@@ -191,8 +193,8 @@ func _ready():
 		path2 = all_paths[randnum2].duplicate()
 	dimension_a_order = path1.duplicate()
 	dimension_b_order = path2.duplicate()
-	var dimension_a = build_dimension(path1, map1, 0.0, -2.0)
-	var dimension_b = build_dimension(path2, map2, 20.0, 18.0)
+	var dimension_a = build_dimension(path1, map1, 0.0, -2.0, "A")
+	var dimension_b = build_dimension(path2, map2, 20.0, 18.0, "B")
 	for i in range(path1.size()):
 		portal_map[path1[i]] = path2[i]
 	
@@ -228,7 +230,7 @@ func _ready():
 		key_in_B.append(key_instance)
 		add_child(key_instance)
 	for i in range(key_in_B.size()):
-		key_in_B[i].key_id = path1[i + 1]
+		key_in_B[i].key_id = "A_%d" % path1[i + 1]
 
 		var mesh = key_in_B[i].get_node("keyobj/keymesh")
 		var mat = StandardMaterial3D.new()
@@ -238,7 +240,7 @@ func _ready():
 		mesh.material_override = mat
 		
 	for i in range(key_in_A.size()):
-		key_in_A[i].key_id = path2[i + 1]
+		key_in_A[i].key_id = "B_%d" % path2[i + 1]
 
 		var mesh = key_in_A[i].get_node("keyobj/keymesh")
 		var mat = StandardMaterial3D.new()
