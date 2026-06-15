@@ -12,7 +12,7 @@ var portal = preload("res://scenes/portal.tscn")
 var flag = preload("res://scenes/endgoal.tscn")
 var dimension_a_order = []
 var dimension_b_order = []
-var dim = 3
+var dim = 2
 const room_spacing := 5.0
 const room_scale := Vector3(5, 5, 5)
 const portal_scale := Vector3(0.7, 0.7, 0.7)
@@ -196,15 +196,6 @@ func _ready():
 	for i in range(path1.size()):
 		portal_map[path1[i]] = path2[i]
 	
-	
-	dimension_a["room_lookup"]
-	dimension_a["room_nodes"]
-	dimension_a["portal_lookup"]
-
-	dimension_b["room_lookup"]
-	dimension_b["room_nodes"]
-	dimension_b["portal_lookup"]
-	
 	for i in range(1, path1.size()):
 		var room_id = path1[i]
 		var pos = dimension_a["room_lookup"][room_id]
@@ -256,7 +247,7 @@ func _ready():
 
 		mesh.material_override = mat
 		
-	for i in range(path1.size()):
+	for i in range(path1.size()-1):
 		var pa = dimension_a["portal_lookup"][path1[i]]
 		var pb = dimension_b["portal_lookup"][path2[i]]
 
@@ -269,8 +260,8 @@ func _ready():
 	endgoal.position = dimension_b["room_nodes"][path2.back()].position
 	endgoal.position.y = 18
 	add_child(endgoal)
-	for room_id in portal_map:
-		print(room_id, " -> ", portal_map[room_id])
+	
+		
 func _process(delta):
 	var endgoal = $endgoal
 	
