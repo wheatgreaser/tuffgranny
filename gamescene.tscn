@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://x8dpind6ne7" path="res://gamescene.gd" id="1_v87xk"]
 [ext_resource type="Script" uid="uid://dm3bem0ieb5x" path="res://Player.gd" id="2_1f6rl"]
+[ext_resource type="AudioStream" uid="uid://q310wlahqegu" path="res://images/ambyforgame.wav" id="3_08g3q"]
 [ext_resource type="Shader" uid="uid://bnsdlp4s7tkvp" path="res://ps1.gdshader" id="3_8h5tw"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_67kj2"]
@@ -24,7 +25,7 @@ script = ExtResource("1_v87xk")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1856071114]
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=216480398 groups=["player"]]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 collision_layer = 32771
 collision_mask = 3
 script = ExtResource("2_1f6rl")
@@ -36,7 +37,11 @@ mesh = SubResource("CapsuleMesh_67kj2")
 shape = SubResource("CapsuleShape3D_5t3cw")
 
 [node name="Camera3D" type="Camera3D" parent="Player" unique_id=1327479915]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0.73944753, 0)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Player" unique_id=374113785]
+stream = ExtResource("3_08g3q")
+autoplay = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=607753156]
 environment = SubResource("Environment_pjt0j")

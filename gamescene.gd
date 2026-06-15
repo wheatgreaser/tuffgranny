@@ -10,14 +10,136 @@ var door = preload("res://door.tscn")
 var key = preload("res://key.tscn")
 var portal = preload("res://portal.tscn")
 var flag = preload("res://endgoal.tscn")
+var dimension_a_order = []
+var dimension_b_order = []
+var dim = 3
+const room_spacing := 5.0
+const room_scale := Vector3(5, 5, 5)
+const portal_scale := Vector3(0.7, 0.7, 0.7)
 
+const room_meshes := [
+	"StaticBody3D2/MeshInstance3D2",
+	"StaticBody3D3/MeshInstance3D6",
+	"StaticBody3D4/MeshInstance3D5",
+	"StaticBody3D5/MeshInstance3D4",
+	"NavigationRegion3D/Floor/floorbody"
+]
 @onready var player = $Player
+func random_color() -> Color:
+	return Color8(
+		rng.randi_range(0, 255),
+		rng.randi_range(0, 255),
+		rng.randi_range(0, 255)
+	)
+func apply_room_color(room_instance: Node3D, color: Color) -> void:
+	var mat = StandardMaterial3D.new()
+	mat.albedo_color = color
 
+	for mesh_path in room_meshes:
+		var mesh = room_instance.get_node(mesh_path)
+		mesh.material_override = mat.duplicate()
+func build_dimension(
+	path: Array,
+	grid: Array,
+	y_offset: float,
+	portal_y_offset: float
+) -> Dictionary:
+
+	var data = {
+		"room_lookup": {},
+		"room_nodes": {},
+		"room_colors": {},
+		"portal_lookup": {},
+		"keys": [],
+		"doors": []
+	}
+
+	for i in range(dim):
+		for j in range(dim):
+
+			var room_id = grid[i][j]
+
+			if room_id not in path:
+				grid[i][j] = 0
+				continue
+
+			var color = random_color()
+
+			var room_instance = room.instantiate()
+			room_instance.position = Vector3(
+				i * room_spacing,
+				y_offset,
+				j * room_spacing
+			)
+			room_instance.scale = room_scale
+
+			apply_room_color(room_instance, color)
+
+			add_child(room_instance)
+
+			data.room_lookup[room_id] = Vector3(i, y_offset, j)
+			data.room_nodes[room_id] = room_instance
+			data.room_colors[room_id] = color
+
+			var portal_instance = portal.instantiate()
+			portal_instance.position = Vector3(
+				i * room_spacing,
+				portal_y_offset,
+				j * room_spacing
+			)
+			portal_instance.player_camera = $Player/Camera3D
+			portal_instance.scale = portal_scale
+
+			add_child(portal_instance)
+
+			data.portal_lookup[room_id] = portal_instance
+
+			grid[i][j] = 1
+
+	for i in range(path.size() - 1):
+
+		var a = data.room_lookup[path[i]]
+		var b = data.room_lookup[path[i + 1]]
+
+		var dir = Vector2(b.x - a.x, b.z - a.z)
+
+		var room_a = data.room_nodes[path[i]]
+		var room_b = data.room_nodes[path[i + 1]]
+
+		var door_instance = door.instantiate()
+
+		door_instance.lock_id = path[i + 1]
+
+		door_instance.wall_node_a = room_a.get_wall(dir)
+		door_instance.wall_node_b = room_b.get_wall(-dir)
+
+		if dir == Vector2(1, 0):
+			door_instance.door_rot = Vector3(0, deg_to_rad(90), 0)
+		elif dir == Vector2(-1, 0):
+			door_instance.door_rot = Vector3(0, deg_to_rad(-90), 0)
+		elif dir == Vector2(0, 1):
+			door_instance.door_rot = Vector3(0, deg_to_rad(180), 0)
+		else:
+			door_instance.door_rot = Vector3.ZERO
+
+		door_instance.position = Vector3(
+			(a.x + b.x) * room_spacing / 2.0,
+			portal_y_offset,
+			(a.z + b.z) * room_spacing / 2.0
+		)
+
+		door_instance.scale = room_scale
+
+		add_child(door_instance)
+
+		data.doors.append(door_instance)
+
+	return data
 func mapper(grid):
 	var k = 1
-	for i in range(3):
+	for i in range(dim):
 		grid.append([])
-		for j in range(3):
+		for j in range(dim):
 			grid[i].append(k)
 			k+=1
 
@@ -28,7 +150,7 @@ func pathgen(pos, path, visited, map):
 	visited[pos] = true
 	
 	
-	if map[y][x] == 9:
+	if map[y][x] == (dim*dim):
 		paths.append(path.duplicate())
 	else:
 		var directions = [
@@ -39,8 +161,9 @@ func pathgen(pos, path, visited, map):
 		]
 		for dir in directions:
 			var next = pos + dir
-			if (next.x >= 0 and next.x < 3 and next.y >= 0 and next.y < 3 and not visited.has(next)):
+			if (next.x >= 0 and next.x < dim and next.y >= 0 and next.y < dim and not visited.has(next)):
 				pathgen(next, path, visited, map)
+				
 	path.pop_back()
 	visited.erase(pos)
 					
@@ -67,19 +190,25 @@ func _ready():
 	var room_node_lookup1 = {}
 	var portal_lookup_A = {}
 	var portal_lookup_B = {}
+	var portal_map = {}
 	
 	mapper(map1)
 	mapper(map2)
+	paths.clear()
 	pathgen(Vector2(0,0), [], {}, map1)
+	var all_paths = paths.duplicate(true)  # deep copy
 	var randnum1 = rng.randi_range(0, paths.size() - 1)
-	var path1 = paths[randnum1]
-	
-	while (path1.size() != path2.size()):
-		var randnum2 = rng.randi_range(0, paths.size() - 1)
-		path2 = paths[randnum2]
-		
-	for i in range(3):
-		for j in range(3):
+	var path1 = all_paths[randnum1].duplicate()
+
+	while path2.size() != path1.size():
+		var randnum2 = rng.randi_range(0, all_paths.size() - 1)
+		path2 = all_paths[randnum2].duplicate()
+	dimension_a_order = path1.duplicate()
+	dimension_b_order = path2.duplicate()
+	for i in range(path1.size()):
+		portal_map[path1[i]] = path2[i]
+	for i in range(dim):
+		for j in range(dim):
 			if map1[i][j] in path1:
 				rng.randomize()
 				var colorrandr = rng.randi_range(0, 255)
@@ -141,13 +270,13 @@ func _ready():
 		door_instance.lock_id = path1[i + 1]
 		door_instance.wall_node_a = room_a_node.get_wall(dir)
 		door_instance.wall_node_b = room_b_node.get_wall(-dir) 
-		if dir == Vector2(1, 0):      # east
+		if dir == Vector2(1, 0):    
 			door_instance.door_rot = Vector3(0, deg_to_rad(90), 0)
-		elif dir == Vector2(-1, 0):   # west
+		elif dir == Vector2(-1, 0):  
 			door_instance.door_rot = Vector3(0, deg_to_rad(-90), 0)
-		elif dir == Vector2(0, 1):    # south
+		elif dir == Vector2(0, 1):    
 			door_instance.door_rot = Vector3(0, deg_to_rad(180), 0)
-		else:                         # north
+		else:                        
 			door_instance.door_rot = Vector3.ZERO
 		door_instance.position = Vector3(
 		(a.x + b.x) * 2.5,
@@ -160,8 +289,8 @@ func _ready():
 		doors1.append(door_instance)
 		
 						
-	for i in range(3):
-		for j in range(3):
+	for i in range(dim):
+		for j in range(dim):
 			if map2[i][j] in path2:
 				rng.randomize()
 				var colorrandr = rng.randi_range(0, 255)
@@ -189,15 +318,16 @@ func _ready():
 				mesh4.material_override = mat.duplicate()
 				mesh5.material_override = mat.duplicate()
 				
+				room_nodes2.append(room_instance)
+				room_lookup2[room_id] = Vector3(i, 20, j)
+				add_child(room_instance)
+
 				var portal_instance = portal.instantiate()
 				portal_instance.position = Vector3(i * 5, 18, j * 5)
 				portal_instance.player_camera = $Player/Camera3D
 				portal_instance.scale = Vector3(0.7, 0.7, 0.7)
 				add_child(portal_instance)
 				portalsB.append(portal_instance)
-				room_nodes2.append(room_instance)
-				room_lookup2[room_id] = Vector3(i, 20, j)
-				add_child(room_instance)
 				portal_lookup_B[room_id] = portal_instance
 				map2[i][j] = 1
 				door_pos2.append(Vector3(i,20,j))
@@ -237,11 +367,13 @@ func _ready():
 		add_child(door_instance)
 		doors2.append(door_instance)
 
-	for i in range(path1.size()):
-		portalsA[i].exit_portal = portalsB[i]
-		portalsB[i].exit_portal = portalsA[i]
-		portalsA[i].activate()
-		portalsB[i].activate()
+	for i in range(path1.size()):  
+		var pa = portal_lookup_A[path1[i]]
+		var pb = portal_lookup_B[path2[i]]
+		pa.exit_portal = pb
+		pb.exit_portal = pa
+		pa.activate()
+		pb.activate()
 		
 	print(room_colors_A)
 	for i in range(key_in_B.size()):
@@ -261,6 +393,17 @@ func _ready():
 	var endgoal = flag.instantiate()
 	endgoal.position = room_node_lookup2[path2[path2.size()-1]].position
 	add_child(endgoal)
-
+	for room_id in portal_map:
+		print(room_id, " -> ", portal_map[room_id])
 func _process(delta):
+	
+	var endgoal = $endgoal
+	if endgoal:
+		print(endgoal.global_position.distance_to(player.global_position))
+	if endgoal and endgoal.global_position.distance_to(player.global_position) < 3:
+		
+		get_tree().change_scene_to_file("res://winscreen.tscn")
 	get_tree().call_group("enemy", "target_position", target.global_transform.origin)
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy.global_position.distance_to(player.global_position) < 0.3:
+			pass

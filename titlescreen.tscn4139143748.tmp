@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bakw1hr68c3xi"]
+
+[ext_resource type="Texture2D" uid="uid://b3yi0nf51a5ah" path="res://images/koigametitlescreen.png" id="1_cjnew"]
+[ext_resource type="Script" uid="uid://dub08aywd4lr7" path="res://titlescreen.gd" id="1_goadl"]
+
+[node name="Node2D" type="Node2D" unique_id=1953506533]
+script = ExtResource("1_goadl")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=910127845]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_cjnew")

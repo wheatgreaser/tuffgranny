@@ -14,7 +14,11 @@ func _process(delta: float) -> void:
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player"):
 		body.keys_owned[key_id] = true
+		# in your key pickup code, temporarily add:
+		print("Picked up key_id: ", key_id)
 		print(body.keys_owned)
+		$AudioStreamPlayer3D.play()
+		await $AudioStreamPlayer3D.finished
 		queue_free()
 	else:
 		pass

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cd8sn0vb5i7ib" path="res://room.gd" id="1_bisa2"]
 [ext_resource type="Material" uid="uid://b1yk83pu2ejj7" path="res://wall1.tres" id="1_bqpif"]
 [ext_resource type="Script" uid="uid://7avw8y7gv40c" path="res://enemy.gd" id="3_4o3f6"]
+[ext_resource type="PackedScene" uid="uid://ddrw3251t06j2" path="res://images/Koi_Tri.fbx" id="4_v5vuv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nv65j"]
 cull_mode = 2
@@ -18,12 +19,11 @@ polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4o3f6"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_bisa2"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v5vuv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bisa2"]
 
 [node name="room" type="Node3D" unique_id=1342040157]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 script = ExtResource("1_bisa2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1849736884]
@@ -96,13 +96,24 @@ mesh = SubResource("BoxMesh_io8hc")
 skeleton = NodePath("../../..")
 
 [node name="enemy" type="CharacterBody3D" parent="." unique_id=593460347 groups=["enemy"]]
-transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -0.12922464, -0.31650954, -0.24779521)
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -0.12922464, -0.23287533, -0.24779521)
 script = ExtResource("3_4o3f6")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="enemy" unique_id=69651912]
-mesh = SubResource("CapsuleMesh_bisa2")
+[node name="Koi_Tri" parent="enemy" unique_id=949053839 instance=ExtResource("4_v5vuv")]
+transform = Transform3D(-0.5, 0, -4.371139e-08, 0, 0.5, 0, 4.371139e-08, 0, -0.5, 5.167669, 0, 0.9970255)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="enemy" unique_id=884479220]
-shape = SubResource("CapsuleShape3D_bisa2")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="enemy" unique_id=663453795]
+transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, -0.5, 0, 0.5, -2.1855694e-08, 1.1049544, 0, 1.3916881)
+shape = SubResource("CapsuleShape3D_v5vuv")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="enemy" unique_id=493310484]
+path_desired_distance = 0.1
+target_desired_distance = 0.1
+
+[node name="Area3D" type="Area3D" parent="enemy" unique_id=774904749]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="enemy/Area3D" unique_id=884479220]
+transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, -1.5, 0, 1.5, -6.556708e-08, 1.1020211, 0, 1.4682522)
+shape = SubResource("CapsuleShape3D_bisa2")
+
+[connection signal="body_entered" from="enemy/Area3D" to="enemy" method="_on_area_3d_body_entered"]
