@@ -25,5 +25,6 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			if wall_node_b:
 				wall_node_b.queue_free()
 			
-			
+			$AudioStreamPlayer3D.play()
+			await $AudioStreamPlayer3D.finished
 			queue_free()

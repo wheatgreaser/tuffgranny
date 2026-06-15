@@ -272,13 +272,9 @@ func _ready():
 	for room_id in portal_map:
 		print(room_id, " -> ", portal_map[room_id])
 func _process(delta):
-	
 	var endgoal = $endgoal
 	
-	if endgoal and endgoal.global_position.distance_to(player.global_position) < 3:
-		set_process(false)
-		get_tree().change_scene_to_file("res://winscreen.tscn")
-		return
+	
 	if endgoal:
 		print(endgoal.global_position.distance_to(player.global_position))
 	if is_instance_valid(player):
@@ -289,4 +285,9 @@ func _process(delta):
 		)
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if enemy.global_position.distance_to(player.global_position) < 0.3:
-			pass
+			set_process(false)
+			call_deferred("_show_death_screen")
+			return
+func _show_death_screen():
+	if is_inside_tree():
+		get_tree().change_scene_to_file("res://scenes/deathscreen.tscn")

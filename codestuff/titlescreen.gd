@@ -1,6 +1,6 @@
 extends Control
 
-var game_scene = preload("res://gamescene.tscn")
+var game_scene = preload("res://scenes/gamescene.tscn")
 func _input(event):
 	if (event is InputEventKey and event.pressed) \
 	or (event is InputEventMouseButton and event.pressed):
