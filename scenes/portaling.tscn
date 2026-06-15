@@ -1,0 +1,137 @@
+[gd_scene format=4 uid="uid://db53nt10eudpm"]
+
+[ext_resource type="Script" uid="uid://cw1r4c1d7beyv" path="res://addons/portals/scripts/portal_3d.gd" id="1_pljwc"]
+[ext_resource type="Material" uid="uid://dcfkcyddxkglf" path="res://addons/portals/materials/editor-preview-portal-material.tres" id="2_irvfb"]
+[ext_resource type="Script" uid="uid://bxcel82b180o3" path="res://addons/portals/scripts/portal_boxmesh.gd" id="3_665kr"]
+[ext_resource type="Script" uid="uid://q4nny0rvfgcf" path="res://codestuff/coolmove.gd" id="4_irvfb"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tj4j8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5pj5l"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_jgyff"]
+_surfaces = [{
+"aabb": AABB(-1, -1.25, -1, 2, 2.5, 1),
+"attribute_data": PackedByteArray("AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAIA/AACAPw=="),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAQABAABAAUAAQADAAUABQADAAcAAwACAAcABwACAAYAAgAAAAYABgAAAAQABAAFAAYABgAFAAcAAAABAAIAAgABAAMA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AACAvwAAoD8AAAAAAACAPwAAoD8AAAAAAACAvwAAoL8AAAAAAACAPwAAoL8AAAAAAACAvwAAoD8AAIC/AACAPwAAoD8AAIC/AACAvwAAoL8AAIC/AACAPwAAoL8AAIC//3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgA==")
+}]
+script = ExtResource("3_665kr")
+size = Vector3(2, 2.5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uaf4v"]
+size = Vector3(2, 2.5, 1)
+
+[sub_resource type="Environment" id="Environment_pljwc"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_pljwc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_irvfb"]
+
+[node name="Node3D" type="Node3D" unique_id=414360964]
+
+[node name="floor" type="MeshInstance3D" parent="." unique_id=683312706]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_tj4j8")
+
+[node name="fatobject" type="MeshInstance3D" parent="." unique_id=827797243]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3354297, 0.937986, 0.90233517)
+mesh = SubResource("BoxMesh_5pj5l")
+
+[node name="Portal3D" type="Node3D" parent="." unique_id=788884530 node_paths=PackedStringArray("exit_portal", "player_camera") groups=["portals"]]
+process_priority = 100
+process_physics_priority = 100
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6318204, 0)
+script = ExtResource("1_pljwc")
+_portal_mesh_path = NodePath("Portal3D_Mesh")
+_teleport_area_path = NodePath("TeleportArea")
+_teleport_collider_path = NodePath("TeleportArea/Collider")
+portal_size = Vector2(2, 2.5)
+exit_portal = NodePath("../Portal3D2")
+player_camera = NodePath("../CharacterBody3D/Camera3D")
+portal_frame_width = 0.0
+viewport_size_mode = 0
+view_direction = 0
+portal_render_layer = 524288
+is_teleport = true
+teleport_direction = 2
+rigidbody_boost = 0.0
+teleport_tolerance = 0.5
+teleport_interactions = 3
+teleport_collision_mask = 32768
+start_deactivated = false
+metadata/_custom_type_script = "uid://cw1r4c1d7beyv"
+metadata/_edit_group_ = true
+
+[node name="Portal3D_Mesh" type="MeshInstance3D" parent="Portal3D" unique_id=49935854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.05, 0, 0, 0)
+layers = 524288
+material_override = ExtResource("2_irvfb")
+cast_shadow = 0
+mesh = SubResource("ArrayMesh_jgyff")
+
+[node name="TeleportArea" type="Area3D" parent="Portal3D" unique_id=319560626]
+
+[node name="Collider" type="CollisionShape3D" parent="Portal3D/TeleportArea" unique_id=1336688104]
+shape = SubResource("BoxShape3D_uaf4v")
+
+[node name="Portal3D2" type="Node3D" parent="." unique_id=1648089669 node_paths=PackedStringArray("exit_portal", "player_camera") groups=["portals"]]
+process_priority = 100
+process_physics_priority = 100
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.187203, 1.6318204, -0.43784237)
+script = ExtResource("1_pljwc")
+_portal_mesh_path = NodePath("Portal3D_Mesh")
+_teleport_area_path = NodePath("TeleportArea")
+_teleport_collider_path = NodePath("TeleportArea/Collider")
+portal_size = Vector2(2, 2.5)
+exit_portal = NodePath("../Portal3D")
+player_camera = NodePath("../CharacterBody3D/Camera3D")
+portal_frame_width = 0.0
+viewport_size_mode = 0
+view_direction = 0
+portal_render_layer = 524288
+is_teleport = true
+teleport_direction = 2
+rigidbody_boost = 0.0
+teleport_tolerance = 0.5
+teleport_interactions = 3
+teleport_collision_mask = 32768
+start_deactivated = false
+metadata/_custom_type_script = "uid://cw1r4c1d7beyv"
+metadata/_edit_group_ = true
+
+[node name="Portal3D_Mesh" type="MeshInstance3D" parent="Portal3D2" unique_id=1026122309]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.05, 0, 0, 0)
+layers = 524288
+material_override = ExtResource("2_irvfb")
+cast_shadow = 0
+mesh = SubResource("ArrayMesh_jgyff")
+
+[node name="TeleportArea" type="Area3D" parent="Portal3D2" unique_id=1912318170]
+
+[node name="Collider" type="CollisionShape3D" parent="Portal3D2/TeleportArea" unique_id=1931406074]
+shape = SubResource("BoxShape3D_uaf4v")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1198689154]
+environment = SubResource("Environment_pljwc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1836581329]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=369038411]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1871916, 4.0800467)
+collision_layer = 32769
+script = ExtResource("4_irvfb")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D" unique_id=1608661210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.31975424, -0.8588412)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=902731705]
+mesh = SubResource("CapsuleMesh_pljwc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=155256321]
+shape = SubResource("CapsuleShape3D_irvfb")

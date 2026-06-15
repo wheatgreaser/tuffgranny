@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://curgpq0msjwc1"]
+
+[ext_resource type="Script" uid="uid://camydhjqd1s6u" path="res://codestuff/prototype.gd" id="1_nhfup"]
+[ext_resource type="PackedScene" uid="uid://chatqwmjucmsp" path="res://scenes/tile_map.tscn" id="2_sdrrl"]
+[ext_resource type="Script" uid="uid://mgv76tbll55q" path="res://codestuff/tile_map.gd" id="3_e38b3"]
+
+[node name="Node2D" type="Node2D" unique_id=1765634461]
+script = ExtResource("1_nhfup")
+
+[node name="TileMap" parent="." unique_id=659747276 instance=ExtResource("2_sdrrl")]
+script = ExtResource("3_e38b3")
